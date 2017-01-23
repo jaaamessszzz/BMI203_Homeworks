@@ -134,7 +134,6 @@ def plot_timecourse():
         wrapped_quick = sort_decorator(test_quick, trials)
         wrapped_bubble = sort_decorator(test_bubble, trials)
 
-        print trials
         n_trials.append(trials)
         time_quick.append(timeit.timeit(wrapped_quick, number=1))
         time_bubble.append(timeit.timeit(wrapped_bubble, number=1))
