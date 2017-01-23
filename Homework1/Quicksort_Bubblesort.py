@@ -1,4 +1,5 @@
 import numpy as np
+import timeit
 
 class Sorting_Algorithms(object):
     def __init__(self):
@@ -8,43 +9,57 @@ class Sorting_Algorithms(object):
         """
         1. Pick a list element as pivot
         2. Move all elements greater than pivot to right, less than pivot to left
-        3. Do it again until pivot is only lement in subset
+        3. Do it again until pivot is only element in subset
+
+        Note:  all commented out print statements were for debugging
 
         Parameters
         ----------
-        unsorted_list
+        unsorted_list: input list with n elements
 
         Returns
         -------
-
+        unsorted_list: input list sorted in place
         """
-        # Indicies of unsorted list
+        # Start and end indicies of unsorted list
         start = 0
-        end = len(unsorted_list) - 1 # Always use right-most element as pivot
+        end = len(unsorted_list) - 1
 
-        print("Starting index: {0}").format(start)
-        print("Ending index: {0}").format(end)
+        # print("Starting index: {0}").format(start)
+        # print("Ending index: {0}").format(end)
 
         def sort(start, end):
-            pivot = end
-            swap_index = start
+            if start <= end:
+                pivot = end
+                swap_index = start
 
-            # pivot_insertion_index = asdf
+                # print("\n**** Before Sort ****")
+                # print("Pivot {0}: {1}").format(end, unsorted_list[end])
+                # print("Swap index: {0}").format(swap_index)
 
-            for element in range(start, end - 1, 1):
-                if unsorted_list[element] > unsorted_list[pivot]:
-                    unsorted_list[swap_index], unsorted_list[element] = unsorted_list[element], unsorted_list[swap_index]
-                    swap_index += 1
+                for element in range(start, end):
+                    # print("Element {0}: {1}").format(element, unsorted_list[element])
+                    if unsorted_list[element] < unsorted_list[pivot]:
+                        unsorted_list[swap_index], unsorted_list[element] = unsorted_list[element], unsorted_list[swap_index]
+                        # print("Swapped {0} with {1}").format(unsorted_list[swap_index], unsorted_list[element])
+                        swap_index = swap_index + 1
 
-            print("Recursive pivot: {0}").format(end)
-            print("Recursive swap index: {0}").format(swap_index)
+                # print("\n**** After Sort ****")
+                # print("Pivot {0}: {1}").format(end, unsorted_list[end])
+                # print("Swap index: {0}").format(swap_index)
 
-            unsorted_list[swap_index], unsorted_list[end] = unsorted_list[end], unsorted_list[swap_index]
+                unsorted_list[swap_index], unsorted_list[end] = unsorted_list[end], unsorted_list[swap_index]
 
-            sort(start, pivot - 1)
-            sort(pivot + 1, end)
+                # print("Sorting progress: {0}").format(unsorted_list)
 
+                sort(start, swap_index - 1)
+                sort(swap_index + 1, end)
+
+        # Recursive sort
         sort(start, end)
+
+        print("\n\nSorted list: {0}\n\n").format(unsorted_list)
+
         return unsorted_list
 
 
@@ -74,13 +89,13 @@ class Sorting_Algorithms(object):
 
 def main():
     print("\n\nRunning sort...\n\n")
-    # test_list = [213, 2, 45, 432, 5346, 3457, 347, 746, 647, 6845, 87, 87, 6759, 867, 986, 658]
-    test_list = [ x * 100 for x in np.random.random(20)]
 
+    test_list = [ x * 100 for x in np.random.random(100)]
     print("Unsorted List: {0}\n\n").format(test_list)
 
     sort_stuff = Sorting_Algorithms()
-    # sort_stuff.Bubblesort(test_list)
+
+    sort_stuff.Bubblesort(test_list)
     sort_stuff.Quicksort(test_list)
 
 main()
