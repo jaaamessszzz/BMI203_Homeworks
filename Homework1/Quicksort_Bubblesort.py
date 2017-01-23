@@ -26,9 +26,9 @@ class Sorting_Algorithms(object):
         unsorted_list: input list sorted in place
         """
         # Checks
-        if not all(isinstance(x,float or int) for x in unsorted_list):
+        if not all([isinstance(x, (float, int)) for x in unsorted_list]):
             return ("List contains an non-int or -float element!")
-        if len(unsorted_list) < 0:
+        if len(unsorted_list) == 0:
             return ("Unsorted list is empty!")
 
         # print("Unsorted List: {0}\n\n").format(unsorted_list)
@@ -95,9 +95,9 @@ class Sorting_Algorithms(object):
         unsorted_list: input list sorted in place
         """
         # Checks
-        if not all(isinstance(x, float or int) for x in unsorted_list):
+        if not all([isinstance(x, (float, int)) for x in unsorted_list]):
             return ("List contains an non-int or -float element!")
-        if len(unsorted_list) < 0:
+        if len(unsorted_list) == 0:
             return ("Unsorted list is empty!")
 
         # print("Unsorted List: {0}\n\n").format(unsorted_list)
