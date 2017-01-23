@@ -218,8 +218,8 @@ class Sorting_Algorithms(object):
         sns.set_style("whitegrid", {'axes.grid' : False})
         fig, ax = plt.subplots()
 
-        sns.regplot("Trial_Number", "Quicksort", df, fit_reg=False, label="Quicksort", color="red")
         sns.regplot("Trial_Number", "Bubblesort", df, fit_reg=False, label="Bubblesort", color="blue")
+        sns.regplot("Trial_Number", "Quicksort", df, fit_reg=False, label="Quicksort", color="red")
 
         # Set axes
         plt.xlim(0, n_trials[-1] + 0.1 * n_trials[-1])
@@ -231,6 +231,7 @@ class Sorting_Algorithms(object):
         plt.setp(plt.gca().get_legend().get_texts(), fontsize=12)
 
         # Set figure text
+        plt.xlabel("Random Input List Size")
         plt.ylabel("Run time (seconds)")
         figure_title = fig.suptitle("Sort Algorithm Run Time as a Funciton of Input Size", fontsize=20)
 
