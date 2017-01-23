@@ -1,5 +1,5 @@
 import numpy as np
-from Quicksort_Bubblesort import Sorting_Algorithms
+from Homework1.Quicksort_Bubblesort import Sorting_Algorithms
 
 def test_bubblesort():
     x = [1, 2, 4, 0, 6, 8, 10, 7, 5, 3, 9]
