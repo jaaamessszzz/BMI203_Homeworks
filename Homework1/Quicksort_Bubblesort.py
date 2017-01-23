@@ -95,7 +95,7 @@ class Sorting_Algorithms(object):
         unsorted_list: input list sorted in place
         """
         # Checks
-        if not all(isinstance(x,float or int) for x in unsorted_list):
+        if not all(isinstance(x, float or int) for x in unsorted_list):
             return ("List contains an non-int or -float element!")
         if len(unsorted_list) < 0:
             return ("Unsorted list is empty!")
@@ -200,4 +200,5 @@ def main():
 
     # plot_timecourse()
 
-main()
+if __name__ == "__main__":
+    main()
