@@ -1,6 +1,6 @@
 import numpy as np
+import scipy as sp
 import pandas as pd
-import matplotlib
 import matplotlib.pyplot as plt
 import seaborn as sns
 import timeit
@@ -98,29 +98,38 @@ class Sorting_Algorithms(object):
         # print("Sorted List: {0}\n\n").format(unsorted_list)
         return unsorted_list
 
+def n_squared(input_N, const, exponent):
+    return const * input_N**exponent
+
+def n_log_n (input_N, const):
+    return const * input_N * np.log(input_N)
+
 def main():
     print("\n\nRunning sort...\n\n")
 
     sort_stuff = Sorting_Algorithms()
-    test_list = [ x * 100 for x in np.random.random(100)]
-    exponential_trials = [2 ** exp for exp in range(0, 20)]
 
-    def sort_decorator(function, arg):
+    # exponential_trials = [2 ** exp for exp in range(0, 11)]
+    exponential_trials = [100 * exp for exp in range(1, 10)]
+
+    def sort_decorator(function, iterations):
+        test_list = [x * 100 for x in np.random.random(iterations)]
         def wrapper():
-            return function(arg)
+            return function(test_list)
         return wrapper
-
-    wrapped_quick = sort_decorator(sort_stuff.Quicksort, test_list)
-    wrapped_bubble = sort_decorator(sort_stuff.Bubblesort, test_list)
 
     n_trials = []
     time_quick = []
     time_bubble = []
 
     for trials in exponential_trials:
+
+        wrapped_quick = sort_decorator(sort_stuff.Quicksort, trials)
+        wrapped_bubble = sort_decorator(sort_stuff.Bubblesort, trials)
+
         n_trials.append(trials)
-        time_quick.append(timeit.timeit(wrapped_quick, number=trials))
-        time_bubble.append(timeit.timeit(wrapped_bubble, number=trials))
+        time_quick.append(timeit.timeit(wrapped_quick, number=100))
+        time_bubble.append(timeit.timeit(wrapped_bubble, number=100))
 
     df = pd.DataFrame({
         "Trial_Number": n_trials,
@@ -132,8 +141,30 @@ def main():
     print(time_quick)
     print(time_bubble)
 
-    sns.regplot("Trial_Number", "Quicksort", df, fit_reg=False)
-    sns.regplot("Trial_Number", "Bubblesort", df, fit_reg=False)
+    fig, ax = plt.subplots()
+
+    sns.regplot("Trial_Number", "Quicksort", df, fit_reg=False, label="Quicksort", color="red")
+    sns.regplot("Trial_Number", "Bubblesort", df, fit_reg=False, label="Bubblesort", color="blue")
+
+    t2 = np.arange(0.0, n_trials[-1], 1)
+
+    popt, pcov = sp.optimize.curve_fit(n_squared, df.Trial_Number, df.Bubblesort)
+    print popt
+    print pcov
+    plt.plot(t2, n_squared(t2, popt[0], popt[1]), 'b--')
+
+    popt, pcov = sp.optimize.curve_fit(n_log_n, df.Trial_Number, df.Quicksort)
+    print popt
+    print pcov
+    plt.plot(t2, n_log_n(t2, popt[0]), 'r--')
+
+
+    plt.xlim(0, n_trials[-1] + 0.1 * n_trials[-1])
+    plt.ylim(0, 60)
+
+    plt.ylabel("Run time (seconds)")
+    fig.suptitle("Sort Algorithm Run Time as a Funciton of Input Size")
+
     plt.show()
 
 main()
