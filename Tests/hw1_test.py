@@ -6,7 +6,7 @@ def test_bubblesort():
     sort_stuff = Sorting_Algorithms()
 
     my_sorted_list = sort_stuff.Bubblesort(unsorted_list=unsorted_list)
-    print("Sorted List: {0}").format(my_sorted_list)
+    print(my_sorted_list)
     print(type(my_sorted_list))
     print( my_sorted_list == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] )
 
@@ -23,7 +23,7 @@ def test_quicksort():
     sort_stuff = Sorting_Algorithms()
 
     my_sorted_list = sort_stuff.Quicksort(unsorted_list=unsorted_list)
-    print("Sorted List: {0}").format(my_sorted_list)
+    print(my_sorted_list)
     print(type(my_sorted_list))
     print ( my_sorted_list == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] )
 
