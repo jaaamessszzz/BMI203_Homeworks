@@ -158,13 +158,13 @@ def plot_timecourse():
     t2 = np.arange(0.0, n_trials[-1], 1)
 
     popt, pcov = sp.optimize.curve_fit(n_squared, df.Trial_Number, df.Bubblesort)
-    print popt
-    print pcov
+    print (popt)
+    print (pcov)
     plt.plot(t2, n_squared(t2, popt[0]), 'b--')
 
     popt, pcov = sp.optimize.curve_fit(n_log_n, df.Trial_Number, df.Quicksort)
-    print popt
-    print pcov
+    print (popt)
+    print (pcov)
     plt.plot(t2, n_log_n(t2, popt[0]), 'r--')
 
     plt.xlim(0, n_trials[-1] + 0.1 * n_trials[-1])
