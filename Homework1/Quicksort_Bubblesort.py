@@ -7,7 +7,7 @@ import timeit
 
 class Sorting_Algorithms(object):
     def __init__(self):
-        empty_list_ = []
+        empty_list = []
 
     def Quicksort(self, unsorted_list):
         """
