@@ -36,7 +36,11 @@ class Sorting_Algorithms(object):
         # print("Ending index: {0}").format(end)
 
         def sort(start, end):
-            if start <= end:
+            if start < end:
+
+                # print("\n**** STARTING NEXT ITERATION ****\n")
+                # print "Subsection length: {0}".format(len(unsorted_list[start:end]))
+
                 pivot = end
                 swap_index = start
 
@@ -44,7 +48,7 @@ class Sorting_Algorithms(object):
                 # print("Pivot {0}: {1}").format(end, unsorted_list[end])
                 # print("Swap index: {0}").format(swap_index)
 
-                for element in range(start, end):
+                for element in range(start, end, 1):
                     # print("Element {0}: {1}").format(element, unsorted_list[element])
                     if unsorted_list[element] < unsorted_list[pivot]:
                         unsorted_list[swap_index], unsorted_list[element] = unsorted_list[element], unsorted_list[swap_index]
@@ -58,6 +62,8 @@ class Sorting_Algorithms(object):
                 unsorted_list[swap_index], unsorted_list[end] = unsorted_list[end], unsorted_list[swap_index]
 
                 # print("Sorting progress: {0}").format(unsorted_list)
+                # print "Subsection left indicies: {0} {1}".format(start, swap_index - 1)
+                # print "Subsection right indicies: {0} {1}".format(swap_index + 1, end)
 
                 sort(start, swap_index - 1)
                 sort(swap_index + 1, end)
@@ -96,26 +102,18 @@ class Sorting_Algorithms(object):
                     unsorted_list[current_index], unsorted_list[current_index + 1] = unsorted_list[current_index + 1], unsorted_list[current_index]
 
         # print("Sorted List: {0}\n\n").format(unsorted_list)
+
         return unsorted_list
 
-def n_squared(input_N, const, exponent):
-    return const * input_N**exponent
-
-def n_log_n (input_N, const):
-    return const * input_N * np.log(input_N)
-
-def main():
-    print("\n\nRunning sort...\n\n")
-
-    sort_stuff = Sorting_Algorithms()
-
-    # exponential_trials = [2 ** exp for exp in range(0, 11)]
-    exponential_trials = [100 * exp for exp in range(1, 10)]
+def plot_timecourse():
+    exponential_trials = [100 * increment for increment in range(1, 11)]
 
     def sort_decorator(function, iterations):
-        test_list = [x * 100 for x in np.random.random(iterations)]
+        sort_stuff = Sorting_Algorithms()
+        test_list = [[x * 100 for x in np.random.random(iterations)] for y in range(100)]
+
         def wrapper():
-            return function(test_list)
+            return function(sort_stuff, test_list)
         return wrapper
 
     n_trials = []
@@ -123,13 +121,13 @@ def main():
     time_bubble = []
 
     for trials in exponential_trials:
+        wrapped_quick = sort_decorator(test_quick, trials)
+        wrapped_bubble = sort_decorator(test_bubble, trials)
 
-        wrapped_quick = sort_decorator(sort_stuff.Quicksort, trials)
-        wrapped_bubble = sort_decorator(sort_stuff.Bubblesort, trials)
-
+        print trials
         n_trials.append(trials)
-        time_quick.append(timeit.timeit(wrapped_quick, number=100))
-        time_bubble.append(timeit.timeit(wrapped_bubble, number=100))
+        time_quick.append(timeit.timeit(wrapped_quick, number=1))
+        time_bubble.append(timeit.timeit(wrapped_bubble, number=1))
 
     df = pd.DataFrame({
         "Trial_Number": n_trials,
@@ -142,6 +140,8 @@ def main():
     print(time_bubble)
 
     fig, ax = plt.subplots()
+    sns.despine()
+    sns.set_style("whitegrid")
 
     sns.regplot("Trial_Number", "Quicksort", df, fit_reg=False, label="Quicksort", color="red")
     sns.regplot("Trial_Number", "Bubblesort", df, fit_reg=False, label="Bubblesort", color="blue")
@@ -158,13 +158,35 @@ def main():
     print pcov
     plt.plot(t2, n_log_n(t2, popt[0]), 'r--')
 
-
     plt.xlim(0, n_trials[-1] + 0.1 * n_trials[-1])
-    plt.ylim(0, 60)
+    plt.ylim(0, 10)
 
     plt.ylabel("Run time (seconds)")
     fig.suptitle("Sort Algorithm Run Time as a Funciton of Input Size")
 
     plt.show()
+
+def n_squared(input_N, const, exponent):
+    return const * input_N**exponent
+
+def n_log_n (input_N, const):
+    return const * input_N * np.log(input_N)
+
+def test_quick(sort_stuff, test_lists):
+    for list in test_lists:
+        sort_stuff.Quicksort(list)
+
+def test_bubble(sort_stuff, test_lists):
+    for list in test_lists:
+        sort_stuff.Bubblesort(list)
+
+def main():
+    print("\n\nRunning sort...\n\n")
+
+    # test_list = [x * 100 for x in np.random.random(100)]
+    # sort_stuff = Sorting_Algorithms()
+    # sort_stuff.Quicksort(test_list)
+
+    plot_timecourse()
 
 main()
