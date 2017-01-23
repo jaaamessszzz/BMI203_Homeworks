@@ -25,6 +25,11 @@ class Sorting_Algorithms(object):
         -------
         unsorted_list: input list sorted in place
         """
+        # Checks
+        if not all(isinstance(x,float or int) for x in unsorted_list):
+            return ("List contains an non-int or -float element!")
+        if len(unsorted_list) < 0:
+            return ("Unsorted list is empty!")
 
         # print("Unsorted List: {0}\n\n").format(unsorted_list)
 
@@ -89,6 +94,11 @@ class Sorting_Algorithms(object):
         -------
         unsorted_list: input list sorted in place
         """
+        # Checks
+        if not all(isinstance(x,float or int) for x in unsorted_list):
+            return ("List contains an non-int or -float element!")
+        if len(unsorted_list) < 0:
+            return ("Unsorted list is empty!")
 
         # print("Unsorted List: {0}\n\n").format(unsorted_list)
 
@@ -151,7 +161,7 @@ def plot_timecourse():
     popt, pcov = sp.optimize.curve_fit(n_squared, df.Trial_Number, df.Bubblesort)
     print popt
     print pcov
-    plt.plot(t2, n_squared(t2, popt[0], popt[1]), 'b--')
+    plt.plot(t2, n_squared(t2, popt[0]), 'b--')
 
     popt, pcov = sp.optimize.curve_fit(n_log_n, df.Trial_Number, df.Quicksort)
     print popt
@@ -166,8 +176,8 @@ def plot_timecourse():
 
     plt.show()
 
-def n_squared(input_N, const, exponent):
-    return const * input_N**exponent
+def n_squared(input_N, const):
+    return const * input_N**2
 
 def n_log_n (input_N, const):
     return const * input_N * np.log(input_N)
@@ -183,10 +193,12 @@ def test_bubble(sort_stuff, test_lists):
 def main():
     print("\n\nRunning sort...\n\n")
 
-    # test_list = [x * 100 for x in np.random.random(100)]
-    # sort_stuff = Sorting_Algorithms()
-    # sort_stuff.Quicksort(test_list)
+    test_list = [x * 100 for x in np.random.random(100)]
 
-    plot_timecourse()
+    sort_stuff = Sorting_Algorithms()
+    sort_result = sort_stuff.Quicksort(test_list)
+    print(sort_result)
+
+    # plot_timecourse()
 
 main()
