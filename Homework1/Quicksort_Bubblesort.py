@@ -1,4 +1,8 @@
 import numpy as np
+import pandas as pd
+import matplotlib
+import matplotlib.pyplot as plt
+import seaborn as sns
 import timeit
 
 class Sorting_Algorithms(object):
@@ -15,12 +19,15 @@ class Sorting_Algorithms(object):
 
         Parameters
         ----------
-        unsorted_list: input list with n elements
+        unsorted_list: unsorted input list with n elements
 
         Returns
         -------
         unsorted_list: input list sorted in place
         """
+
+        # print("Unsorted List: {0}\n\n").format(unsorted_list)
+
         # Start and end indicies of unsorted list
         start = 0
         end = len(unsorted_list) - 1
@@ -58,7 +65,7 @@ class Sorting_Algorithms(object):
         # Recursive sort
         sort(start, end)
 
-        print("\n\nSorted list: {0}\n\n").format(unsorted_list)
+        # print("\n\nSorted list: {0}\n\n").format(unsorted_list)
 
         return unsorted_list
 
@@ -68,14 +75,18 @@ class Sorting_Algorithms(object):
         This algorithm make n-1 passes though a list of length n and checks adjacent pairs with indexes i and i-1.
         If element i is less than element i-1, switch the two elements and continue.
 
+        Parameters
+        ----------
+        unsorted_list: unsorted input list with n elements
+
         Returns
         -------
-        test_list_ : sorted list in original list variable
+        unsorted_list: input list sorted in place
         """
-        list_length = len(unsorted_list)
 
-        print(unsorted_list)
-        print(list_length)
+        # print("Unsorted List: {0}\n\n").format(unsorted_list)
+
+        list_length = len(unsorted_list)
 
         # Make n passes through array
         for element_index in range( list_length ):
@@ -84,18 +95,45 @@ class Sorting_Algorithms(object):
                 if unsorted_list[current_index] > unsorted_list[current_index + 1]:
                     unsorted_list[current_index], unsorted_list[current_index + 1] = unsorted_list[current_index + 1], unsorted_list[current_index]
 
-        print("Sorted List: {0}\n\n").format(unsorted_list)
+        # print("Sorted List: {0}\n\n").format(unsorted_list)
         return unsorted_list
 
 def main():
     print("\n\nRunning sort...\n\n")
 
-    test_list = [ x * 100 for x in np.random.random(100)]
-    print("Unsorted List: {0}\n\n").format(test_list)
-
     sort_stuff = Sorting_Algorithms()
+    test_list = [ x * 100 for x in np.random.random(100)]
+    exponential_trials = [2 ** exp for exp in range(0, 20)]
 
-    sort_stuff.Bubblesort(test_list)
-    sort_stuff.Quicksort(test_list)
+    def sort_decorator(function, arg):
+        def wrapper():
+            return function(arg)
+        return wrapper
+
+    wrapped_quick = sort_decorator(sort_stuff.Quicksort, test_list)
+    wrapped_bubble = sort_decorator(sort_stuff.Bubblesort, test_list)
+
+    n_trials = []
+    time_quick = []
+    time_bubble = []
+
+    for trials in exponential_trials:
+        n_trials.append(trials)
+        time_quick.append(timeit.timeit(wrapped_quick, number=trials))
+        time_bubble.append(timeit.timeit(wrapped_bubble, number=trials))
+
+    df = pd.DataFrame({
+        "Trial_Number": n_trials,
+        "Quicksort": time_quick,
+        "Bubblesort": time_bubble
+    })
+
+    print(n_trials)
+    print(time_quick)
+    print(time_bubble)
+
+    sns.regplot("Trial_Number", "Quicksort", df, fit_reg=False)
+    sns.regplot("Trial_Number", "Bubblesort", df, fit_reg=False)
+    plt.show()
 
 main()
