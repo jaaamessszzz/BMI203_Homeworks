@@ -3,26 +3,30 @@ from Homework1.Quicksort_Bubblesort import Sorting_Algorithms
 
 def test_bubblesort():
     unsorted_list = [1, 2, 4, 0, 6, 8, 10, 7, 5, 3, 9]
-    sorted = Sorting_Algorithms.Bubblesort(unsorted_list=unsorted_list)
+    sort_stuff = Sorting_Algorithms()
+
+    sorted = sort_stuff.Bubblesort(unsorted_list=unsorted_list)
     assert sorted == [0,1,2,3,4,5,6,7,8,9,10]
 
     unsorted_list.append("A")
-    sorted = Sorting_Algorithms.Bubblesort(unsorted_list=unsorted_list)
+    sorted = sort_stuff.Bubblesort(unsorted_list=unsorted_list)
     assert sorted == "List contains an non-int or -float element!"
 
     unsorted_list = []
-    sorted = Sorting_Algorithms.Bubblesort(unsorted_list=unsorted_list)
+    sorted = sort_stuff.Bubblesort(unsorted_list=unsorted_list)
     assert sorted == "Unsorted list is empty!"
 
 def test_quicksort():
     unsorted_list = [1, 2, 4, 0, 6, 8, 10, 7, 5, 3, 9]
-    sorted = Sorting_Algorithms.Quicksort(unsorted_list=unsorted_list)
+    sort_stuff = Sorting_Algorithms()
+
+    sorted = sort_stuff.Quicksort(unsorted_list=unsorted_list)
     assert sorted == [0,1,2,3,4,5,6,7,8,9,10]
 
     unsorted_list.append("A")
-    sorted = Sorting_Algorithms.Quicksort(unsorted_list=unsorted_list)
+    sorted = sort_stuff.Quicksort(unsorted_list=unsorted_list)
     assert sorted == "List contains an non-int or -float element!"
 
     unsorted_list = []
-    sorted = Sorting_Algorithms.Quicksort(unsorted_list=unsorted_list)
+    sorted = sort_stuff.Quicksort(unsorted_list=unsorted_list)
     assert sorted == "Unsorted list is empty!"
