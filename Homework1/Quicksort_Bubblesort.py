@@ -201,39 +201,31 @@ class Sorting_Algorithms(object):
             "Bubblesort": time_bubble
         })
 
-        print(n_trials)
-        print(time_quick)
-        print(time_bubble)
-
-        counts_df = pd.DataFrame({
-            "Avg_bubble_assignmets" : avg_bubble_assign,
-            "Avg_bubble_conditionals" : avg_bubble_condit,
-            "Avg_quick_assignmets" : avg_quick_assign,
-            "Avg_quick_conditionals" : avg_quick_condit
-        })
-
-        counts_df.to_csv("Algorithm_scaling_counts.csv")
-
-        # Set up plotting
         sns.set_style("whitegrid", {'axes.grid' : False})
-        fig, ax = plt.subplots()
+        fig = plt.figure(figsize=(8, 12), facecolor='white')
+        figure_title = fig.suptitle("Sort Algorithm Run Time, Assignments, and Conditionals as a Function of Input Size\nGitHub: https://github.com/jaaamessszzz/BMI203_Homeworks",
+                                    y=1.005, fontsize=16)
 
-        sns.regplot("Trial_Number", "Bubblesort", df, fit_reg=False, label="Bubblesort", color="blue")
-        sns.regplot("Trial_Number", "Quicksort", df, fit_reg=False, label="Quicksort", color="red")
+        plt.subplots_adjust(hspace=0.5, wspace=1)
+        ax = plt.subplot2grid((4,4), (0,0), colspan=4, rowspan=2)
+
+        # Set up plotting for ax
+        sns.regplot("Trial_Number", "Bubblesort", df, fit_reg=False, label="Bubblesort", color="blue", ax=ax)
+        sns.regplot("Trial_Number", "Quicksort", df, fit_reg=False, label="Quicksort", color="red", ax=ax)
 
         # Set axes
         plt.xlim(0, n_trials[-1] + 0.1 * n_trials[-1])
-        plt.ylim(0, 15)
+        plt.ylim(0, 16)
 
         # Set Legend
         handles, labels = ax.get_legend_handles_labels()
         ax.legend(handles, labels, loc=2)
-        plt.setp(plt.gca().get_legend().get_texts(), fontsize=12)
+        # plt.setp(plt.gca().get_legend().get_texts(), fontsize=12)
 
         # Set figure text
         plt.xlabel("Random Input List Size")
         plt.ylabel("Run time (seconds)")
-        figure_title = fig.suptitle("Sort Algorithm Run Time as a Funciton of Input Size", fontsize=20)
+        ax.set_title('Non-Linear Least Squares Regressions for\nQuicksort and Bubblesort Run Times', fontsize=16)
 
         t2 = np.arange(0.0, n_trials[-1], 1)
 
@@ -253,7 +245,47 @@ class Sorting_Algorithms(object):
         ax.text(40, 10.5, r"Quicksort fit to $f(N) = constant * Nlog(N)$", fontsize=12)
         ax.text(40, 9.75, r"Quicksort fitted constant = $%s$" % popt[0], fontsize=12)
 
-        fig.savefig("Algorithm_Scaling.pdf", dpi=300, bbox_inches="tight", bbox_extra_artists = [figure_title])
+        # Set up histograms for assignment/conditional counts
+        counts_df = pd.DataFrame({
+            "Avg_bubble_assignments" : avg_bubble_assign,
+            "Avg_bubble_conditionals" : avg_bubble_condit,
+            "Avg_quick_assignments" : avg_quick_assign,
+            "Avg_quick_conditionals" : avg_quick_condit
+        })
+
+        sns.set_style("whitegrid", {'axes.grid': True})
+
+        ax1 = plt.subplot2grid((4,4), (2,0), colspan=2)
+        sns.barplot([x for x in range(100,1100, 100)], counts_df.Avg_bubble_assignments, ax=ax1)
+        plt.xlabel("Random Input List Size")
+        plt.ylabel("Mean Number of Assignments")
+        plt.ylim(0, 600000)
+        ax1.set_title('Bubblesort Assignments', fontsize=12)
+
+        ax2 = plt.subplot2grid((4,4), (3,0), colspan=2)
+        sns.barplot([x for x in range(100,1100, 100)], counts_df.Avg_bubble_conditionals, ax=ax2)
+        plt.xlabel("Random Input List Size")
+        plt.ylabel("Mean Number of Conditionals")
+        plt.ylim(0, 300000)
+        ax2.set_title('Bubblesort Conditionals', fontsize=12)
+
+        ax3 = plt.subplot2grid((4,4), (2,2), colspan=2)
+        sns.barplot([x for x in range(100,1100, 100)], counts_df.Avg_quick_assignments, ax=ax3)
+        plt.xlabel("Random Input List Size")
+        plt.ylabel("Mean Number of Assignments")
+        plt.ylim(0, 600000)
+        ax3.set_title('Quicksort Assignments', fontsize=12)
+
+        ax4 = plt.subplot2grid((4,4), (3,2), colspan=2)
+        sns.barplot([x for x in range(100,1100, 100)], counts_df.Avg_quick_conditionals, ax=ax4)
+        plt.xlabel("Random Input List Size")
+        plt.ylabel("Mean Number of Conditionals")
+        plt.ylim(0, 300000)
+        ax4.set_title('Quicksort Conditionals', fontsize=12)
+
+        # Save things
+        counts_df.to_csv("Algorithm_scaling_counts.csv")
+        fig.savefig("JamesLucas_BMI203_HW1.pdf", dpi=600, bbox_inches="tight", bbox_extra_artists=[figure_title])
 
     def n_squared(self, input_N, const):
         return const * input_N**2
